@@ -135,13 +135,10 @@ PRODUCT_PACKAGES += \
     libstdc++_vendor \
     vendor.qti.hardware.camera.device@1.0
 
-<<<<<<< HEAD
-=======
 # Device Settings
 PRODUCT_PACKAGES += \
     DeviceSettings
 
->>>>>>> upstream/14.0-DS
 # Configstore
 PRODUCT_PACKAGES += \
     disable_configstore
