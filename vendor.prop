@@ -58,6 +58,7 @@ vendor.audio.spkr_prot.tx.sampling_rate=48000
 vendor.audio.use.sw.alac.decoder=true
 vendor.audio.use.sw.ape.decoder=true
 vendor.voice.path.for.pcm.voip=true
+af.resampler.quality=7
 
 # Bluetooth
 bluetooth.device.class_of_device=90,2,12
@@ -95,6 +96,10 @@ ro.vendor.display.foss=1
 vendor.display.foss.config=1
 vendor.display.foss.config_path=/vendor/etc/FOSSConfig.xml
 
+# Fling velocities
+ro.min.fling_velocity=140
+ro.max.fling_velocity=20000
+
 # Graphics
 ro.hardware.egl=adreno
 vendor.display.disable_partial_split=1
@@ -105,6 +110,11 @@ vendor.gralloc.enable_fb_ubwc=1
 
 # Media
 vendor.vidc.debug.level=1
+
+# OMX
+# Rank OMX SW codecs lower than OMX HW codecs
+debug.stagefright.omx_default_rank.sw-audio=1
+debug.stagefright.omx_default_rank=0
 
 # Perf
 ro.vendor.extension_library=libqti-perfd-client.so
@@ -140,8 +150,12 @@ ro.vendor.sensors.multishake=true
 persist.vendor.sensors.direct_channel=true
 
 # Soc
-ro.soc.manufacturer=Qualcomm
+ro.soc.manufacturer=QTI
 ro.soc.model=MSM8998
+
+# Telephony
+# Disable handling audio direction changes on IMS calls.
+ro.telephony.handle_audio_direction_changes_between_call_state_changes=false
 
 # Timeservice
 persist.vendor.delta_time.enable=true

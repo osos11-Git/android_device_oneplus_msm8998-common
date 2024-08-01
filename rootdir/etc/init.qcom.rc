@@ -27,6 +27,7 @@
 
 import /vendor/etc/init/hw/init.qcom.usb.rc
 import /vendor/etc/init/hw/init.target.rc
+import /vendor/etc/init/hw/init.target.displaymodes.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -308,9 +309,26 @@ on boot
     # Set TCP MTU probing to automatic
     write /proc/sys/net/ipv4/tcp_mtu_probing 1
 
+    # Fast charge
+    chown system system /sys/class/power_supply/battery/fastchg_status
+    chmod 0664 /sys/class/power_supply/battery/fastchg_status
+    chown system system /sys/kernel/fast_charge/force_fast_charge
+    chmod 0664 /sys/kernel/fast_charge/force_fast_charge
+
     start vendor.qcrild
     start vendor.qcrild2
     start vendor.dataqti
+    
+    # Vibrator permissions
+    chown system system /sys/class/leds/vibrator/vmax_mv
+    chmod 0660 /sys/class/leds/vibrator/vmax_mv
+
+    # sysfs permissions
+    chown system system /sys/class/power_supply/battery/fastchg_status
+    chmod 0664 /sys/class/power_supply/battery/fastchg_status
+
+    chown system system /sys/kernel/fast_charge/force_fast_charge
+    chmod 0664 /sys/kernel/fast_charge/force_fast_charge
 
 on charger
     start vendor.dashd
@@ -347,6 +365,9 @@ on property:sys.boot_completed=1
     write /dev/stune/schedtune.prefer_idle 0
     write /dev/stune/schedtune.boost 0
 
+    # Turn off scheduler boost at the end
+    write /proc/sys/kernel/sched_boost 0
+
     # Enable UFS powersaving
     write /sys/devices/soc/${ro.boot.bootdevice}/clkscale_enable 1
     write /sys/devices/soc/${ro.boot.bootdevice}/clkgate_enable 1
@@ -366,6 +387,14 @@ on property:sys.boot_completed=1
     # WDSP FW boot sysfs node used by STHAL
     chown media audio /sys/kernel/wcd_cpe0/fw_name
 
+    # Sound control: various audio gain controls
+    chown system system /sys/kernel/sound_control/earpiece_gain
+    chown system system /sys/kernel/sound_control/headphone_gain
+    chown system system /sys/kernel/sound_control/mic_gain
+    chmod 664 /sys/kernel/sound_control/earpiece_gain
+    chmod 664 /sys/kernel/sound_control/headphone_gain
+    chmod 664 /sys/kernel/sound_control/mic_gain
+
     # Let kernel know our image version/variant/crm_version
     write /sys/devices/soc0/select_image 10
     write /sys/devices/soc0/image_version "10:${ro.build.id}:${ro.build.version.incremental}"
@@ -374,6 +403,16 @@ on property:sys.boot_completed=1
 
     # Enable PowerHAL hint processing
     setprop vendor.powerhal.init 1
+
+    # Audio gains
+    chown system system /sys/kernel/sound_control/earpiece_gain
+    chmod 0664 /sys/kernel/sound_control/earpiece_gain
+
+    chown system system /sys/kernel/sound_control/headphone_gain
+    chmod 0664 /sys/kernel/sound_control/headphone_gain
+
+    chown system system /sys/kernel/sound_control/mic_gain
+    chmod 0664 /sys/kernel/sound_control/mic_gain
 
     write /dev/kmsg "Boot completed "
 
