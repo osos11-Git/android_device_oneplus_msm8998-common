@@ -337,6 +337,13 @@ PRODUCT_COPY_FILES += \
     system/core/libprocessgroup/profiles/cgroups_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/cgroups.json \
     system/core/libprocessgroup/profiles/task_profiles_28.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
 
+# Prebuilts
+PRODUCT_PACKAGES += \
+    GCAM
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/prebuilts/vendor/etc/permissions/org.codeaurora.snapcam.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/org.codeaurora.snapcam.xml
+
 # Protobuf
 PRODUCT_PACKAGES += \
     libprotobuf-cpp-full-vendorcompat \
